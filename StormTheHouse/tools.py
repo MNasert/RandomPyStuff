@@ -6,13 +6,13 @@ from pynput.mouse import Button #Handling button events
 from PIL import ImageGrab as ImageGrab #Library for getting screen images
 import numpy as np #Commonly used math library
 #Frame of the game
-#x=628 y=502
-#x2=1164 y2=643
+#x=628 y=502 upper left corner
+#x2=1164 y2=643 lower right corner
 
 
 def getImg(): #Function to capture a picture and convert it to a np array
     img = ImageGrab.grab(bbox=(628,502,1164,643)).convert("L") #Get a grayscale image
-    img = np.array(img) #Turn the image to a np array
+    img = np.array(img) #Turn the image to an np array
     img.reshape([643-502,1164-628]) #Reshape the picture to a 2D array
     return img #Return the array
 
@@ -23,10 +23,10 @@ def findEnemy(img): #Function to find enemies on screen
         pos = [627+ind[1],500 +ind[0]-3] #Convert the index to a position on screen and turn values to x,y
         return pos #Return the position on the screen in [x,y]
     else: #If there is no value greater 150 on screen:
-        return None #Return None
+        return None #Return None so nothing
 
 def on_click(x,y,button,pressed): #If the mouse is pressed while listener is running:
-    if button == Button.right: #If the pressed button is equals the right mouse button
+    if button == Button.right: #If the pressed button equals the right mouse button
         print("Listener stopped") #Print something
         return False #Return False- resulting in collapsing the listener thread
 
