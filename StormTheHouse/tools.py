@@ -1,3 +1,4 @@
+#@author Maximilian Nasert
 #Library for Getting stuff to work
 
 #Imports

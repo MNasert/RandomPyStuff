@@ -1,3 +1,4 @@
+#@author Maximilian Nasert
 import StormTheHouse.tools as tools #Tools
 from pynput.mouse import Button, Controller  #Handling the mouse
 from pynput.keyboard import Key #Handling key events
