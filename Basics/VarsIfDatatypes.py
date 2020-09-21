@@ -18,7 +18,7 @@ if __name__ == "__main__":
     mulLis = [[["a"], ["b"], ["c"]], [["d"], ["e"], ["f"]]]
     print(mulLis, type(mulLis))
 
-    string = "amma mafakin string bitch"
+    string = "imma mafakin string bitch"
     print(string, type(string), "\n")
     ###
     ###
