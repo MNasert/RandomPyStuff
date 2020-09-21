@@ -44,7 +44,7 @@ class QAgent():
             obs = torch.Tensor([obs])
             obs = obs.to(self.evalnet.device)
             actions = self.evalnet.forward(obs)
-            action = torch.argmax(actions).item()
+            action = torch.argmax(actions).item() + 1
             self.learncounter += 1
             return action
         else:
@@ -79,8 +79,9 @@ class QAgent():
 
         states, actions, rewards, states_, dones = self.sample_memory()
         indices = torch.arange(self.batch_size, device=self.evalnet.device)
+        actions = actions-1
 
-        q_pred = self.evalnet.forward(states).max(dim=1)[0]
+        q_pred = self.evalnet.forward(states)[indices, actions.long()]
         q_next = self.nextnet.forward(states_)
 
         q_next[dones] = 0.0

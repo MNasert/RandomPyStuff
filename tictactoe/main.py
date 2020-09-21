@@ -5,13 +5,13 @@ from tqdm import tqdm as tqdm
 if __name__ == "__main__":
     game = tools.init()
     statespace = tools.make_gamestate(game).reshape([3, 3])
-    agent = QA.QAgent(lr=.01, epsilon=1., eps_dec=1e-5, eps_min=1e-2, gamma=.99,
+    agent = QA.QAgent(lr=5e-3, epsilon=1., eps_dec=5e-6, eps_min=4e-2, gamma=.99,
                       statespace=statespace, actionspace=9, chkpt_dir="tmp/model",
-                      memorysize=250000, batchsize=32, rplcinterv=250)
+                      memorysize=250000, batchsize=32, rplcinterv=500)
     scores = []
 
-    for n_games in tqdm(range(100000)):
-        meansize = 5000
+    for n_games in tqdm(range(250000)):
+        meansize = 1000
         score = 0
         win = False
         game = tools.init()
@@ -40,9 +40,13 @@ if __name__ == "__main__":
                 #print("Possible moves:", posmov)
                 move = agent.choose_action(obs=state, posmovs=posmov)
                 if move not in posmov:
-                    score -= 50
+                    score -= 100
+                game = tools.move(mov=move,
+                                  emptyspaces=posmov, game_grid=game, pid=pid)
+                if move not in posmov:
+                    break
                 score += tools.give_reward(i=i)
-                game = tools.move(mov=move if move in posmov else np.random.choice(posmov),
+                game = tools.move(mov=move,
                                   emptyspaces=posmov, game_grid=game, pid=pid)
                 agent.store_transition(state, move,
                                        score, state_, int(win))
@@ -51,6 +55,10 @@ if __name__ == "__main__":
             #tools.drawGrid(game_grid=game)
             win = tools.checkWinLoss(game)
             if win:
+                if pid == 2:
+                    score+=25
+                    agent.store_transition(state, move,
+                                           score, state_, int(win))
                 #tools.drawGrid(game)
                 #print("Player: ", pid + 1, "won")
                 break

@@ -27,7 +27,7 @@ class DQNet(nn.Module):
         x = x.squeeze()
         x = self.fc1(x)
         x = self.fc2(x)
-        x = f.relu(x)
+        #x = f.relu(x)
         return x
 
     def calc_fcsize(self, statespace):
