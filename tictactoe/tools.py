@@ -75,10 +75,28 @@ def make_gamestate(game_grid):
     return gamestate
 
 def give_reward(i):
-    if i <= 7:
-        return i
-    if i > 7:
-        return -1
+    return 4-i
 
 def naive_bot(posmov):
     return np.random.choice(posmov)
+
+
+
+
+
+
+
+
+
+
+
+
+#
+
+
+
+
+
+
+
+

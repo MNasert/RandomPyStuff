@@ -1,7 +1,6 @@
 
 
 
-
 if __name__ == "__main__":
     print("for between 0 and x")
     for i in range(10):
@@ -37,6 +36,4 @@ if __name__ == "__main__":
         print(i)
         if i > 10:
             break
-
-
 

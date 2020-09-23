@@ -10,10 +10,11 @@ class DQNet(nn.Module):
         self.actionspace = actionspace
         self.chkpt_dir = chkpt_dir
 
-        self.conv1 = torch.nn.Conv2d(in_channels=1, out_channels=16, kernel_size=2)
-        self.conv2 = torch.nn.Conv2d(in_channels=16, out_channels=32, kernel_size=2)
+        #self.conv1 = torch.nn.Conv2d(in_channels=1, out_channels=16, kernel_size=2)
+        #self.conv2 = torch.nn.Conv2d(in_channels=16, out_channels=32, kernel_size=2)
         self.fc1 = nn.Linear(self.calc_fcsize(statespace=statespace), 256)
-        self.fc2 = nn.Linear(256, self.actionspace)
+        self.fc2 = nn.Linear(256, 1024)
+        self.fc3 = nn.Linear(1024, self.actionspace)
 
         self.optimizer = torch.optim.Adadelta(self.parameters(), lr=self.lr, )
         self.loss = nn.MSELoss()
@@ -22,18 +23,18 @@ class DQNet(nn.Module):
 
     def forward(self, x):
         x = x.unsqueeze(1)
-        x = f.tanh(self.conv1(x))
-        x = f.tanh(self.conv2(x))
-        x = x.squeeze()
-        x = self.fc1(x)
-        x = self.fc2(x)
-        #x = f.relu(x)
+        #probably conv
+        x = x.flatten(start_dim=1)
+        x = f.tanh(self.fc1(x))
+        x = f.tanh(self.fc2(x))
+        x = f.leaky_relu(self.fc3(x))
         return x
 
     def calc_fcsize(self, statespace):
         test = torch.zeros(1, 1, *statespace.shape)
-        test = self.conv1(test)
-        test = self.conv2(test)
+        #just forward through conv layers
+        #test = self.conv1(test)
+        #test = self.conv2(test)
         fcchannels = int(np.prod(test.size()))
         return fcchannels
 
