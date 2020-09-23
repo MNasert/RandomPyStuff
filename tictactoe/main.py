@@ -5,15 +5,15 @@ import time as time
 from tqdm import tqdm as tqdm
 if __name__ == "__main__":
     game = tools.init()
-    statespace = tools.make_gamestate(game).reshape([3, 3])
-    agentP1 = QA.QAgent(lr=5e-3, epsilon=.3, eps_dec=2e-5, eps_min=4e-2, gamma=.99,
+    statespace = tools.make_gamestate(game, 0).reshape([3, 3])
+    agentP1 = QA.QAgent(lr=5e-3, epsilon=1., eps_dec=2e-5, eps_min=4e-2, gamma=.99,
                         statespace=statespace, actionspace=9, chkpt_dir="ModelP1/dqnttt",
                         memorysize=150000, batchsize=64, rplcinterv=100)
 
-    agentP2 = QA.QAgent(lr=5e-3, epsilon=.3, eps_dec=1e-5, eps_min=4e-2, gamma=.99,
+    agentP2 = QA.QAgent(lr=5e-3, epsilon=1., eps_dec=1e-5, eps_min=4e-2, gamma=.99,
                         statespace=statespace, actionspace=9, chkpt_dir="ModelP2/dqnttt",
                         memorysize=150000, batchsize=64, rplcinterv=100)
-    player = 1
+    player = 0
     vis = 0
     load = 1
     messesP1 = 0
@@ -31,7 +31,7 @@ if __name__ == "__main__":
         scoreP1, scoreP2 = 0, 0
         win = False
         game = tools.init()
-        state_ = tools.make_gamestate(game)
+        state_ = tools.make_gamestate(game_grid=game, pid=0)
         if n_games % meansize == 0:
             agentP1.save_models()
             agentP2.save_models()
@@ -51,7 +51,7 @@ if __name__ == "__main__":
         for i in range(9):
             pid = 0 if i % 2 == 0 else 1
             posmov = tools.getPosMovs(game_grid=game)
-            state = tools.make_gamestate(game_grid=game)
+            state = tools.make_gamestate(game_grid=game, pid=pid)
 
             if pid == 0:
                 if player != 1:

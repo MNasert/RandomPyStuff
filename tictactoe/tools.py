@@ -61,18 +61,17 @@ def checkRow(row):
         if row[0] == row[1] and row[0] == row[2]:
             return True
 
-def make_gamestate(game_grid):
+def make_gamestate(game_grid, pid):
     gamestate = []
+    ident = ["X", "O"] if pid == 0 else ["O", "X"]
     for i in range(len(game_grid)):
-        if game_grid[i] == "X":
+        if game_grid[i] == ident[0]:
             gamestate.append(-1)
-        elif game_grid[i] == "O":
+        elif game_grid[i] == ident[1]:
             gamestate.append(0)
         else:
             gamestate.append(1)
-    gamestate = np.array(gamestate)
-    gamestate = gamestate.reshape([3, 3])
-    return gamestate
+    return np.array(gamestate).reshape([3, 3])
 
 def give_reward(i):
     return 4-i
